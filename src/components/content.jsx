@@ -3,14 +3,8 @@ import Task from './task'
 
 class content extends Component {
     state = { 
-        tasks: [
-            {id:1,task:"Theis happening 1"},
-            {id:2,task:"Theis happening 2"},
-            {id:3,task:"Theis happening 3"},
-            {id:4,task:"Theis happening 4"},
-            {id:5,task:"Theis happening 5"},
-            {id:6,task:"Theis happening 6"},
-        ]
+        tasks: [],
+        value : '',
     }
 
     handleDone = (task) =>{
@@ -22,6 +16,22 @@ class content extends Component {
         this.setState({tasks});
     }
 
+    handleChange = (event) => {
+        this.setState({
+            value: event.target.value
+        });
+    }
+
+    handleAddTask = () => {
+        if(this.state.value){
+            const tasks = [...this.state.tasks];
+            const lastId = tasks.length;
+            tasks[lastId] = {id:lastId + 1, task: this.state.value};
+            this.setState({tasks});
+            this.setState({value:''});
+        }
+    }
+
     render() { 
         return ( <React.Fragment>
             <main className="container">
@@ -29,10 +39,10 @@ class content extends Component {
                     <div className="col-md-12 p-5">
                         <div className="input-group ">
                             <div className="custom-file">
-                                <input type="text" className="form-control" id="" required placeholder="Enter Task" />
+                                <input type="text" className="form-control" value={this.state.value} onChange={this.handleChange} id="" required placeholder="Enter Task" />
                             </div>
                             <div className="input-group-append">
-                                <button className="btn btn-primary" type="button">Add Task</button>
+                                <button onClick={this.handleAddTask} className="btn btn-primary" type="button">Add Task</button>
                             </div>
                         </div>
                     </div>
@@ -46,7 +56,15 @@ class content extends Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.state.tasks.map(task => <Task key={task.id} id={task.id} task={task.task} onDelete={()=>{this.handleDelete(task)}} onDone={() => {this.handleDone(task)}} />)}
+                                {
+                                    (this.state.tasks.length === 0) ? 
+                                    (<tr>
+                                        <td colSpan="3" className="font-italic text-center text-bold">No record found</td>
+                                    </tr>)
+                                    :
+                                    (this.state.tasks.map(task => <Task key={task.id} id={task.id} task={task.task} onDelete={()=>{this.handleDelete(task)}} onDone={() => {this.handleDone(task)}} />))
+                                    
+                                }
                             </tbody>
                         </table>
                     </div>
