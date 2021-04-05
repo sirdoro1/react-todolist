@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
-import Task from './task'
+import Task from './task';
+import tasks from './tasks.json';
 
 class content extends Component {
     state = { 
         tasks: [],
         completed: [],
         value : '',
+    }
+
+    componentDidMount(){
+        // fetch('https://jsonplaceholder.typicode.com/todos/1')
+        // .then(response => response.json())
+        // .then(json => console.log(json))
+        this.setState({tasks});
     }
 
     handleAddTask = () =>{
